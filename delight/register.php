@@ -1,14 +1,13 @@
 <?php
 require "DataBase.php";
 
-// Get the raw JSON input
 $input = file_get_contents("php://input");
 $data = json_decode($input, true);
 
 $db = new DataBase();
-if (isset($data['username']) && isset($data['password'])) {
+if (isset($data['username']) && isset($data['email']) && isset($data['password'])) {
     if ($db->dbConnect()) {
-        if ($db->signUp("users", $data['username'], $data['password'])) {
+        if ($db->signUp("users", $data['username'], $data['email'], $data['password'])) {
             echo "Sign Up Success";
         } else {
             echo "Sign up Failed";

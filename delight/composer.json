@@ -1,0 +1,13 @@
+{
+    "name": "gilbe/delight",
+    "description": "basic food app",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Gilbe\\Delight\\": "src/"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}

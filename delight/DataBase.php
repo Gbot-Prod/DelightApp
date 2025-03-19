@@ -52,18 +52,42 @@ class DataBase
         return $login;
     }
 
-    function signUp($table, $username, $password)
+    function signUp($table, $username, $email, $password)
     {
         $username = $this->prepareData($username);
+        $email = $this->prepareData($email);
         $password = $this->prepareData($password);
         $password = password_hash($password, PASSWORD_DEFAULT);
         $this->sql =
-            "INSERT INTO " . $table . " (username, password) VALUES ('" . $username . "','" . $password . "')";
+            "INSERT INTO " . $table . " (username, email, password) VALUES ('" . $username . "','" . $email . "','" . $password . "')";
         if (mysqli_query($this->connect, $this->sql)) {
             return true;
         } else return false;
     }
 
+    function resetPassword($table, $email, $password) 
+    {
+        // Sanitize inputs
+        $email = $this->prepareData($email);
+        $password = $this->prepareData($password);
+    
+        // Hash the new password
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+        // Build the SQL query
+        $this->sql = "UPDATE " . $table . " SET password = '" . $hashedPassword . "' WHERE email = '" . $email . "'";
+    
+        // Execute the query
+        if (mysqli_query($this->connect, $this->sql)) {
+            // Check if any rows were affected
+            if (mysqli_affected_rows($this->connect) > 0) {
+                return true; // Password reset successful
+            } else {
+                return false; // No user found with that email
+            }
+        } else {
+            return false; // Query execution failed
+        }
+    }
 }
-
 ?>
